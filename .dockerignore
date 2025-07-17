@@ -2,19 +2,11 @@ npm-debug.log
 yarn-error.log
 yarn-debug.log*
 logs
-
-# Папки с зависимостями
 node_modules
-
-# Файлы Docker
 Dockerfile
 .dockerignore
-
-# Файлы Git
 .git
 .gitignore
-
-# Локальные данные и переменные окружения
 failed_captchas
 .env
 .DS_Store

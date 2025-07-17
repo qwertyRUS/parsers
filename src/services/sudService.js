@@ -57,24 +57,19 @@ export const sudService = async () => {
     await page.waitForSelector(captchaImageSelector, { visible: true });
     const captchaElement = await page.$(captchaImageSelector);
 
-    // Получаем изображение капчи в формате base64
     const captchaImageBase64 = await captchaElement.screenshot({ encoding: 'base64' });
 
-    // Отправляем на распознавание
     const { taskId, filePath } = await createTask(captchaImageBase64);
     const captchaText = await getResult(taskId);
-    // Вводим распознанный текст в поле
     const captchaInputSelector = 'input[name="captcha-response"]';
     await page.type(captchaInputSelector, captchaText, { delay: 200 });
 
-    // Нажимаем кнопку "Продолжить"
     const submitButtonSelector = 'form#kcaptchaForm button[type="submit"]';
     await Promise.all([
       page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 40000 }),
       page.click(submitButtonSelector)
     ]);
 
-    // Проверяем, не остались ли мы на странице с капчей (признак ошибки)
     const captchaElementAfterSubmit = await page.$(captchaImageSelector);
     if (captchaElementAfterSubmit)
       throw new Error(
@@ -86,7 +81,6 @@ export const sudService = async () => {
 
     await page.waitForSelector('table#tablcont', { visible: true, timeout: 40000 });
 
-    // --- Этап 6: Парсинг и сохранение результатов ---
     logger.info('Начинаю этап 6: Парсинг и сохранение результатов...');
     const scrapingResult = await page.evaluate(() => {
       const noResultsElement = document.querySelector('#search_results > p');

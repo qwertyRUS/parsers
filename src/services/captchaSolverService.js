@@ -92,8 +92,6 @@ const getResult = async taskId => {
         return data.solution.text;
       }
     } catch (error) {
-      // This will catch axios errors and the error thrown above.
-      // If it's not a 2captcha API error, we should log it to DB.
       if (!error.message.startsWith('2captcha.getTaskResult error:')) {
         await MaintanenceModel.findOneAndUpdate(
           { taskID: taskId },
@@ -106,7 +104,7 @@ const getResult = async taskId => {
         );
       }
       logger.error(`Error in getResult for taskId ${taskId}: ${error.message}`);
-      throw error; // rethrow the original error to break the loop and propagate
+      throw error; 
     }
     await new Promise(r => setTimeout(r, 5000));
   }

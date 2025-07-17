@@ -1,6 +1,6 @@
 .env
 yarn.lock
-node-modules/
+node_modules/
 dist/
 logs/
 failed_captures/

@@ -8,14 +8,13 @@ export default [
 
   js.configs.recommended,
 
-  // Наша основная конфигурация
   {
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
-        ...globals.node, // Все глобальные переменные Node.js
-        ...globals.browser // Добавляем все глобальные переменные браузера (document, window и т.д.)
+        ...globals.node,
+        ...globals.browser
       }
     },
     rules: {

@@ -6,7 +6,7 @@ export const attachUserMiddleware = async (ctx, next) => {
     if (user) {
       ctx.dbUser = user;
       if (user.role === 'blacklisted') {
-        return; // Игнорируем заблокированных
+        return;
       }
     }
   }

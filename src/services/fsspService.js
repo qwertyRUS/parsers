@@ -28,12 +28,11 @@ export const fsspService = async () => {
     logger.info(`Переход на ${FSSP_URL}`);
     await page.goto(FSSP_URL, { waitUntil: 'networkidle2' });
 
-    // Кликаем по label, так как сам input может быть невидимым или иметь нулевые размеры.
     const individualRadioSelector = 'div.b-form__cell label.b-form__radio';
     logger.info('Ожидание и клик по label "Поиск по физическим лицам"');
     await page.waitForSelector(individualRadioSelector, { visible: true });
-    await new Promise(resolve => setTimeout(resolve, 3000)); // Ждем 3 секунды по запросу
-    await page.click(individualRadioSelector); // Кликаем по первому найденному элементу
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await page.click(individualRadioSelector);
 
     const lastNameInputSelector = 'input[name="is[last_name]"]';
     const firstNameInputSelector = 'input[name="is[first_name]"]';
@@ -56,7 +55,6 @@ export const fsspService = async () => {
     logger.info(`Ввод даты рождения: ${BIRTHDAY}`);
     await page.type(dobInputSelector, BIRTHDAY);
 
-    // --- Выбор региона ---
     const regionDropdownTriggerSelector = '#region_id_chosen';
     logger.info('Открытие выпадающего списка регионов');
     await page.click(regionDropdownTriggerSelector);
@@ -68,13 +66,11 @@ export const fsspService = async () => {
     await page.waitForSelector(regionResultSelector, { visible: true });
     await page.click(regionResultSelector);
 
-    // --- Нажатие кнопки "Найти" ---
     const searchButtonSelector = '#btn-sbm';
     logger.info('Нажимаю кнопку "Найти"');
     await page.waitForSelector(searchButtonSelector, { visible: true });
     await page.click(searchButtonSelector);
 
-    // --- Этап 3: Решение капчи с повторными попытками ---
     const captchaMaxRetries = 3;
     for (let i = 0; i < captchaMaxRetries; i++) {
       const captchaImageSelector = 'img#capchaVisualImage';
@@ -83,7 +79,7 @@ export const fsspService = async () => {
         await page.waitForSelector(captchaImageSelector, { visible: true, timeout: 15000 });
       } catch (e) {
         logger.info('Капча не появилась. Предполагаем, что результатов нет или они уже загружены.');
-        break; // Выходим из цикла, если капча не появилась
+        break;
       }
 
       const captchaImageSrc = await page.$eval(captchaImageSelector, img => img.src);
@@ -99,7 +95,6 @@ export const fsspService = async () => {
       const captchaSubmitButtonSelector = 'input#ncapcha-submit';
       await page.click(captchaSubmitButtonSelector);
 
-      // Ждем, чтобы увидеть, была ли капча принята
       await new Promise(resolve => setTimeout(resolve, 4000));
 
       const isCaptchaStillVisible = await page.$(captchaImageSelector);
@@ -107,7 +102,7 @@ export const fsspService = async () => {
       if (!isCaptchaStillVisible) {
         logger.info('✅ Капча пройдена успешно.');
         await deleteCaptchaFile(filePath);
-        break; // Успех, выходим из цикла
+        break;
       }
 
       if (i === captchaMaxRetries - 1) {
@@ -119,10 +114,7 @@ export const fsspService = async () => {
         captchaInputSelector
       );
     }
-
-    // --- Этап 4: Парсинг и сохранение результатов ---
     logger.info('Начинаю парсинг результатов...');
-
     const noResultsSelector = '.results-frame .empty';
     const noResultsElement = await page.$(noResultsSelector);
     if (noResultsElement) {

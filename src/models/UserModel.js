@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
     },
     username: {
       type: String,
-      required: false // username может быть не указан в Telegram
+      required: false
     },
     firstName: {
       type: String,
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true // Добавляет поля createdAt и updatedAt
+    timestamps: true
   }
 );
 
