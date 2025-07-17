@@ -1,0 +1,6 @@
+.env
+yarn.lock
+node-modules/
+dist/
+logs/
+failed_captures/
