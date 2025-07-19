@@ -1,6 +1,8 @@
 import cron from 'node-cron';
 import { gazService } from '../services/gazService.js';
 import { elektroService } from '../services/elektroService.js';
+import { fsspService } from '../services/fsspService.js';
+import { sudService } from '../services/sudService.js';
 
 const createRetryingJob = (
   schedule,
@@ -25,6 +27,12 @@ const createRetryingJob = (
 };
 
 export const initSchedulers = () => {
-  // createRetryingJob('* 12 14 * *', elektroService, 'ТНС-Энерго');
-  // createRetryingJob('5 14 14 * *', gazService, 'Газпром');
+  createRetryingJob('9 9 2 * 1-5', elektroService, 'ТНС-Энерго');
+  createRetryingJob('9 9 5 * 1-5', elektroService, 'ТНС-Энерго');
+  createRetryingJob('20 9 2 * 1-5', fsspService, 'ФССП');
+  createRetryingJob('20 9 5 * 1-5', fsspService, 'ФССП');
+  createRetryingJob('15 9 2 * 1-5', gazService, 'Газпром');
+  createRetryingJob('15 9 5 * 1-5', gazService, 'Газпром');
+  createRetryingJob('45 9 2 * 1-5', sudService, 'Мировой суд');
+  createRetryingJob('45 9 5 * 1-5', sudService, 'Мировой суд');
 };
