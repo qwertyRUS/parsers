@@ -9,10 +9,6 @@ RUN yarn install --frozen-lockfile
 
 # 2) Копируем исходники и билдим esbuild
 COPY . .
-RUN ls -al \
-  && ls -al src \
-  && node -v \
-  && yarn -vRUN yarn build
 
 # ─── СТАДИЯ 2: runtime ─────────────────────────────────────────
 FROM node:20.15.1-slim AS runtime

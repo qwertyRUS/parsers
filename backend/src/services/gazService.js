@@ -14,7 +14,7 @@ export const gazService = async () => {
 
   try {
     browser = await puppeteer.launch({
-      headless: HEADLESS_MODE === 'false' ? false : 'new',
+      headless: HEADLESS_MODE,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       defaultViewport: {
         width: 1280,

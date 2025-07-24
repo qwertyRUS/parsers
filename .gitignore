@@ -3,4 +3,6 @@ yarn.lock
 node_modules/
 dist/
 logs/
+*.log
 failed_captures/
+captcha*

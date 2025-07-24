@@ -1,8 +1,10 @@
+import { logger } from '../../../logger.js';
 import { findOrCreateUser } from '../../services/userService.js';
 
 export const attachUserMiddleware = async (ctx, next) => {
   if (ctx.from) {
     const user = await findOrCreateUser(ctx.from);
+    logger.info('Зашол пользователь:', ctx.from);
     if (user) {
       ctx.dbUser = user;
       if (user.role === 'blacklisted') {

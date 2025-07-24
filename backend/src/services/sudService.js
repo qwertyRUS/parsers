@@ -35,7 +35,7 @@ export const sudService = async () => {
   let browser;
   try {
     browser = await puppeteer.launch({
-      headless: HEADLESS_MODE === 'false' ? false : 'new',
+      headless: HEADLESS_MODE,
       ignoreHTTPSErrors: true,
       args: [
         '--no-sandbox',

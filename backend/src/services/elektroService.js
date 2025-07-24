@@ -1,23 +1,23 @@
 import puppeteer from 'puppeteer';
 import ElektroModel from '../models/ElektroModel.js';
+import { ELEKTRO_URL, HEADLESS_MODE } from '../config/constants.js';
 
 export const elektroService = async () => {
-  const { ELEKTRO, ELEKTROlogin, ELEKTROPWD, HEADLESS_MODE } = process.env;
-
-  if (!ELEKTRO || !ELEKTROlogin || !ELEKTROPWD)
+  const { ELEKTROlogin, ELEKTROPWD } = process.env;
+  if (!ELEKTRO_URL || !ELEKTROlogin || !ELEKTROPWD)
     throw new Error('ELEKTRO, ELEKTROlogin, and ELEKTROPWD must be set in .env file');
 
   let browser;
 
   try {
     browser = await puppeteer.launch({
-      headless: HEADLESS_MODE === 'false' ? false : 'new',
+      headless: HEADLESS_MODE,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       defaultViewport: { width: 1280, height: 1024 }
     });
 
     const page = await browser.newPage();
-    await page.goto(ELEKTRO, { waitUntil: 'networkidle2' });
+    await page.goto(ELEKTRO_URL, { waitUntil: 'networkidle2' });
 
     const accountNumberSelector = '#user_name_id';
     const continueButtonSelector = 'input[type="submit"]';

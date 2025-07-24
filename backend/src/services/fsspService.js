@@ -19,7 +19,7 @@ export const fsspService = async () => {
 
   try {
     browser = await puppeteer.launch({
-      headless: HEADLESS_MODE === 'false' ? false : 'new',
+      headless: HEADLESS_MODE,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
       defaultViewport: { width: 1280, height: 1024 }
     });
